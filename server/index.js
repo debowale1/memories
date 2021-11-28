@@ -21,6 +21,9 @@ app.use(cors())
 
 //mount routes
 app.use('/posts', postRouter)
+app.get('/', (_, res) => {
+  res.send('Hello from memories API')
+})
 
 const port = process.env.PORT || 3030
 app.listen(port, console.log(`server running on port ${port}`))
