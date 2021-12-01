@@ -6,18 +6,40 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import useStyles from './styles' 
 import Input from './Input'
 import Icon from './Icon'
-// import { useHistory } from 'react-router';
+import {signin, signup} from '../../actions/auth'
+import { useNavigate } from 'react-router-dom';
 
-const Auth = ({history}) => {
+const initialState = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+}
+const Auth = () => {
   const classes = useStyles()
   const [showPassword, setShowPassword] = useState(false)
   const [isSignup, setIsSignup] = useState(false)
+  const [formData, setFormData] = useState(initialState)
+
   const dispatch = useDispatch()
-  // const history = useHistory()
+  const navigate = useNavigate()
   
   const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword)
-  const handleSubmit = () => {}
-  const handleChange = () => {}
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if(isSignup){
+      dispatch(signup(formData, navigate))
+    }else{
+      dispatch(signin(formData, navigate))
+    }
+  }
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const switchMode = () => {
     setIsSignup((prevSignupState) => !prevSignupState)
@@ -31,7 +53,7 @@ const Auth = ({history}) => {
     
     try {
       dispatch({ type: 'AUTH', data: {result, token}})
-      history.push('/')
+      navigate('/')
     } catch (error) {
       console.log(error)
     }
@@ -61,20 +83,20 @@ const Auth = ({history}) => {
                   autoFocus
                   half
                   // value={}
-                  onChange={handleChange} 
+                  handleChange={handleChange} 
                 />
                 <Input 
                   name="lastName" 
                   label="Last Name" 
                   half
                   // value={}
-                  onChange={handleChange} 
+                  handleChange={handleChange} 
                 />
                 </>
               )
             }
-            <Input name='email' lable='Email Address' onChange={handleChange} type='email' />
-            <Input name='password' lable='Password' onChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword}/>
+            <Input name='email' lable='Email Address' handleChange={handleChange} type='email' />
+            <Input name='password' lable='Password' handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword}/>
             {isSignup && <Input name='confirmPassword' label='Repeat Password' handleChange={handleChange} />}
           </Grid>
           <Button className={classes.submit} variant="contained" color="primary" type="submit" fullWidth>{isSignup ? 'Sign Up' : 'Sign In'}</Button>
