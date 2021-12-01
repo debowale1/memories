@@ -4,6 +4,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import postRouter from './routes/postRoutes.js'
+import userRouter from './routes/userRoutes.js'
 
 dotenv.config()
 const app = express()
@@ -21,6 +22,8 @@ app.use(cors())
 
 //mount routes
 app.use('/posts', postRouter)
+app.use('/users', userRouter)
+
 app.get('/', (_, res) => {
   res.send('Hello from memories API')
 })
