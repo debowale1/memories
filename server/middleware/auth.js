@@ -6,11 +6,11 @@ export const auth = async (req, res, next) => {
   try {
     
     let token;
-    if(req.headers.authorization && req.headers.authorizations.starsWith('Bearer')){
+    if(req.headers.Authorization){
       token = req.headers.authorization.split(' ')[1]
     }
-    let decoded
     const isCustomAuth = token.length < 500
+    let decoded
   
     if(!token) return res.status(401).json({message: 'You are not logged in. Please log in to continue'})
 

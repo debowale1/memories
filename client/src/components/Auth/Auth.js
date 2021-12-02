@@ -43,7 +43,7 @@ const Auth = () => {
 
   const switchMode = () => {
     setIsSignup((prevSignupState) => !prevSignupState)
-    handleShowPassword(false)
+    setShowPassword(false)
 
   }
 
@@ -97,7 +97,7 @@ const Auth = () => {
             }
             <Input name='email' lable='Email Address' handleChange={handleChange} type='email' />
             <Input name='password' lable='Password' handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword}/>
-            {isSignup && <Input name='confirmPassword' label='Repeat Password' handleChange={handleChange} />}
+            {isSignup && <Input type='password' name='confirmPassword' label='Repeat Password' handleChange={handleChange} />}
           </Grid>
           <Button className={classes.submit} variant="contained" color="primary" type="submit" fullWidth>{isSignup ? 'Sign Up' : 'Sign In'}</Button>
           <GoogleLogin

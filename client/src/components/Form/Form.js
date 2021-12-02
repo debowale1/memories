@@ -8,9 +8,10 @@ import {createPost, updatePost} from '../../actions/posts'
 const Form = ({currentId, setCurrentId}) => {
   const post = useSelector((state) => currentId ? state.posts.find(p => p._id === currentId): null)
   const classes = useStyles()
+  const user = JSON.parse(localStorage.getItem('profile'))
 
   const [postData, setPostData] = useState({
-    title: '', creator: '', message: '', tags: '', selectedFile: ''
+    title: '', message: '', tags: '', selectedFile: ''
   })  
   const dispatch = useDispatch()
 
@@ -21,31 +22,31 @@ const Form = ({currentId, setCurrentId}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if(!currentId){
-      dispatch(createPost(postData))
+      dispatch(createPost({...postData, name: user?.result?.name }))
     }else{
-      dispatch(updatePost(currentId, postData))
+      dispatch(updatePost(currentId, {...postData, name: user?.result?.name }))
     }
     clear()
   }
   const clear = () => {
     setCurrentId(null)
     setPostData({
-      title: '', creator: '', message: '', tags: '', selectedFile: ''
+      title: '', message: '', tags: '', selectedFile: ''
     })
+  }
+
+  if(!user?.result?.name){
+    <Paper className={classes.paper}>
+      <Typography variant='h6' align='center'>
+        Please sign in to create your own memories and like other's memories
+      </Typography>
+    </Paper>
   }
 
   return (
     <Paper className={classes.paper}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
         <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
-        <TextField 
-          name="creator" 
-          label="Creator" 
-          variant="outlined"
-          fullWidth
-          value={postData.creator}
-          onChange={(e) => setPostData({ ...postData, creator: e.target.value})} 
-        />
         <TextField 
           name="title" 
           label="Title" 
