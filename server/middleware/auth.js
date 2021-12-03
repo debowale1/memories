@@ -29,7 +29,7 @@ export const auth = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: 'error',
-      err
+      error
     });
   }
 }
